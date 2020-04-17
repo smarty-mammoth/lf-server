@@ -21,9 +21,12 @@ public class UserSerivce {
         return users.get(id);
     }
     public User findUserByLogin(String login) {
-        return users.entrySet().stream()
-                .filter(u -> u.getValue().getLogin().toLowerCase() == login.toLowerCase())
-                .findFirst().get().getValue();
+        var res = users.entrySet().stream()
+                .filter(u -> u.getValue().getLogin().toLowerCase().equals(login.toLowerCase()))
+                .findFirst();
+        if (res.isPresent())
+            return res.get().getValue();
+        return null;
     }
     public boolean userExists(String login) {
         User user = findUserByLogin(login);
@@ -31,7 +34,7 @@ public class UserSerivce {
         return true;
     }
     public User findUserByHash(String hash) {
-        return users.entrySet().stream().filter(u -> u.getValue().getHash() == hash).findFirst().get().getValue();
+        return users.entrySet().stream().filter(u -> u.getValue().getHash().equals(hash)).findFirst().get().getValue();
     }
 
     public void addUser(User user) {
