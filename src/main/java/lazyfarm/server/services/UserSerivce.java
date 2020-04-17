@@ -20,4 +20,22 @@ public class UserSerivce {
     public User findUserById(Long id) {
         return users.get(id);
     }
+    public User findUserByLogin(String login) {
+        return users.entrySet().stream()
+                .filter(u -> u.getValue().getLogin().toLowerCase() == login.toLowerCase())
+                .findFirst().get().getValue();
+    }
+    public boolean userExists(String login) {
+        User user = findUserByLogin(login);
+        if (null == user) return false;
+        return true;
+    }
+    public User findUserByHash(String hash) {
+        return users.entrySet().stream().filter(u -> u.getValue().getHash() == hash).findFirst().get().getValue();
+    }
+
+    public void addUser(User user) {
+        users.put(users.size() + 1L, user);
+    }
+
 }

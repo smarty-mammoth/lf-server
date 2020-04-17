@@ -1,8 +1,28 @@
 package lazyfarm.server.entities;
 
 public class User {
-    private String name;
+    private String login;
     private Long id;
+
+    public String getHash() {
+        return hash;
+    }
+
+    public void setHash(String hash) {
+        this.hash = hash;
+    }
+
+    private String hash;
+
+    public String getToken() {
+        return token;
+    }
+
+    public void setToken(String token) {
+        this.token = token;
+    }
+
+    private String token;
 
     public Long getId() {
         return id;
@@ -12,17 +32,22 @@ public class User {
         this.id = id;
     }
 
-    public User(Long id, String name) {
+    public User (String login, String hash) {
+        this.login = login;
+        this.hash = hash;
+    }
+
+    public User(Long id, String login) {
         this.id = id;
-        this.name = name;
+        this.login = login;
     }
 
-    public String getName() {
-        return name;
+    public String getLogin() {
+        return login;
     }
 
-    public void setName(String name) {
-        this.name = name;
+    public void setLogin(String login) {
+        this.login = login;
     }
 
 }
