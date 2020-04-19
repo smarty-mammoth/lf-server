@@ -20,7 +20,9 @@ import static org.springframework.test.web.servlet.request.MockMvcRequestBuilder
 import org.springframework.test.web.servlet.result.MockMvcResultMatchers;
 import org.springframework.web.util.UriComponents;
 
+import java.lang.reflect.Array;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 import static org.hamcrest.Matchers.containsString;
@@ -38,13 +40,10 @@ public class TestGrowboxRestController {
 
     @Test
     public void testGetAllGrowboxes() throws Exception {
-        List<GrowBox> boxes = new ArrayList<>() {
-            {
-                new GrowBox("box1");
-            }
-        };
+        List<GrowBox> boxes = Arrays.asList(new GrowBox("box1"));
         Mockito.when(growBoxSerivce.getAllBoxes()).thenReturn(boxes);
-        mockMvc.perform(get("/")).andDo(print()).andExpect(content().json("{'success': true}"));
+        mockMvc.perform(get("/")).andDo(print()).andExpect(content()
+            .json("{'success': true, 'growBoxes':[{'name': 'box1'}]}"));
     }
 
 
