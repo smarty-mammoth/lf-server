@@ -21,4 +21,6 @@ public class ResponseData {
 		this.err = err;
 	}
 
+	public Error getErr() { return err; }
+
 }
