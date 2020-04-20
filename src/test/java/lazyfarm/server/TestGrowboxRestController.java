@@ -2,6 +2,7 @@ package lazyfarm.server;
 
 import lazyfarm.server.controllers.AuthRestController;
 import lazyfarm.server.entities.GrowBox;
+import lazyfarm.server.entities.Sensor;
 import lazyfarm.server.entities.User;
 import lazyfarm.server.services.GrowboxService;
 import lazyfarm.server.services.UserSerivce;
@@ -44,6 +45,15 @@ public class TestGrowboxRestController {
         Mockito.when(growBoxSerivce.getAllBoxes()).thenReturn(boxes);
         mockMvc.perform(get("/")).andDo(print()).andExpect(content()
             .json("{'success': true, 'growBoxes':[{'name': 'box1'}]}"));
+    }
+
+    @Test
+    public void testGetAllSensorsByGrowboxId() throws Exception {
+        List<Sensor> sensors = Arrays.asList(new Sensor("Sensor1", ""), new Sensor("Sensor2", "..."));
+        Mockito.when(growBoxSerivce.findSensorsById(1L)).thenReturn(sensors);
+        Mockito.when(growBoxSerivce.findById(1L)).thenReturn(new GrowBox(""));
+        mockMvc.perform(get("/1/sensors")).andExpect(content()
+                .json("{'success': true, 'sensors':[{'name':'Sensor1'}, {'name':'Sensor2'}]}"));
     }
 
 

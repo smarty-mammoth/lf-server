@@ -1,8 +1,11 @@
 package lazyfarm.server.controllers;
 
 import lazyfarm.server.entities.GrowBox;
+import lazyfarm.server.exeptions.APIException;
+import lazyfarm.server.response.CodeError;
 import lazyfarm.server.response.GrowboxResponseData;
 import lazyfarm.server.response.ResponseData;
+import lazyfarm.server.response.SensorResponseData;
 import lazyfarm.server.services.GrowboxService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -27,6 +30,20 @@ public class GrowboxRestController {
     public ResponseData getAllDevices(@PathVariable("id") Long idGrowBox) {
         var response = new  ResponseData();
         growboxService.findDevicesById(idGrowBox);
+        return response;
+    }
+
+    @RequestMapping("/{id}/sensors")
+    public ResponseData getAllSensorsByIdGrowbox(@PathVariable("id") Long idGrowbox) {
+        var response = new SensorResponseData();
+        try {
+            var box = growboxService.findById(idGrowbox);
+            if (null == box) throw new APIException(CodeError.GROWBOX_NOT_FOUND);
+            response.setSensors(growboxService.findSensorsById(idGrowbox));
+        }
+        catch (APIException e) {
+            response.setError(e.getError());
+        }
         return response;
     }
 

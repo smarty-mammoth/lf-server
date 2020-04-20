@@ -7,6 +7,11 @@ public class Sensor {
     private Device device;
     private Long channel;
 
+    public Sensor(String name, String description) {
+        this.name = name;
+        this.description = description;
+    }
+
     public Long getId() {
         return id;
     }
