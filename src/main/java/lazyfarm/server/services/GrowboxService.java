@@ -29,6 +29,10 @@ public class GrowboxService {
 
     }
 
+    public void addSensor(Long idGrowbox, Sensor sensor) {
+
+    }
+
     public List<Sensor> findSensorsById(Long idGrowbox) { return null; }
 
     public List<Device> findDevicesById(Long id) {

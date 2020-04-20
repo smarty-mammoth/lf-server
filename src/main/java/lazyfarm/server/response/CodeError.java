@@ -2,7 +2,7 @@ package lazyfarm.server.response;
 
 public enum CodeError {
     UNKNOWN(0), LOGIN_EXISTS(1), INCORRECT_PASSWORD(2), NOT_AUTHORIZED(3), LOGIN_IS_EMPTY(4), PASSWORD_IS_EMPTY(5),
-    GROWBOX_NOT_FOUND(7);
+    GROWBOX_NOT_FOUND(7), NULL_ARGUMENTS(8);
 
     private final int value;
 
@@ -27,6 +27,8 @@ public enum CodeError {
                 return "Password cannot be empty.";
             case GROWBOX_NOT_FOUND:
                 return "GrowBox not found or not exists.";
+            case NULL_ARGUMENTS:
+                return "Arguments of function cannot be empty.";
             default: return "Unknown error.";
         }
     }

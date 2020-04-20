@@ -39,6 +39,10 @@ public class UserSerivce {
                 .findFirst().get().getValue();
     }
 
+    public User findUserByToken(String token) {
+        return null;
+    }
+
     public String calculateHash(String password) {
         return "0xABADBABE" + password;
     }

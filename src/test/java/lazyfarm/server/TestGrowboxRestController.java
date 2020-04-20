@@ -4,6 +4,7 @@ import lazyfarm.server.controllers.AuthRestController;
 import lazyfarm.server.entities.GrowBox;
 import lazyfarm.server.entities.Sensor;
 import lazyfarm.server.entities.User;
+import lazyfarm.server.response.ResponseData;
 import lazyfarm.server.services.GrowboxService;
 import lazyfarm.server.services.UserSerivce;
 import org.junit.jupiter.api.Test;
@@ -54,6 +55,19 @@ public class TestGrowboxRestController {
         Mockito.when(growBoxSerivce.findById(1L)).thenReturn(new GrowBox(""));
         mockMvc.perform(get("/1/sensors")).andExpect(content()
                 .json("{'success': true, 'sensors':[{'name':'Sensor1'}, {'name':'Sensor2'}]}"));
+    }
+
+    @Test
+    public void testAddSensorToGrowbox() throws Exception {
+        String mockedToken = "0xABADBABE";
+        Mockito.when(growBoxSerivce.findById(1L)).thenReturn(new GrowBox("box1"));
+        Mockito.when(userSerivce.findUserByToken(mockedToken)).thenReturn(new User("test", "test"));
+
+        mockMvc.perform(get("/1/sensors/add")
+                .param("token", mockedToken)
+                .param("name", "sensor1")
+                .param("description", "..."))
+                .andExpect(content().json("{'success': true}"));
     }
 
 
