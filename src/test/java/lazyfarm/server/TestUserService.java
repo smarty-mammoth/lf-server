@@ -24,10 +24,21 @@ public class TestUserService {
 	public void testFindUserById() {
 		var user = new User("user1", "0xABADC0DE");
 		userRepo.save(user);
-		var foundUser = Optional.of(userService.findUserById(user.getId()));
+		var foundUser = userService.findUserById(user.getId());
 		foundUser.ifPresentOrElse(
 			u -> assertThat(u.getHash()).isEqualTo(user.getHash()),
-			() -> assertThat("foundUser is null")
+			() -> assertThat("Found User canot be null.")
+		);
+	}
+	
+	@Test
+	public void testFindUserByLogin() {
+		var user = new User("user2", "0xABADBABE");
+	//	userRepo.save(user);
+		var foundUser = userService.findUserByLogin("user2");
+		foundUser.ifPresentOrElse(
+			u -> assertThat(u.getHash()).isEqualTo(user.getHash()),
+			() -> assertThat("Found user cannot be null.")
 		);
 	}
 	

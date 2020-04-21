@@ -18,12 +18,12 @@ public class UserRestController {
         this.userSerivce = userSerivce;
     }
 
-    @RequestMapping("{id}")
-    public User findUserById(
-		@PathVariable("id") Long id,
-		@RequestHeader("api-ver") String api) 
-	{
+    // @RequestMapping("{id}")
+    // public User findUserById(
+		// @PathVariable("id") Long id,
+		// @RequestHeader("api-ver") String api) 
+	// {
 		
-        return userSerivce.findUserById(id);
-    }
+        // return userSerivce.findUserById(id);
+    // }
 }

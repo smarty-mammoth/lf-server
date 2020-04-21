@@ -25,24 +25,17 @@ public class UserSerivce {
         users.put(3L, new User(3L, "User 3"));
     }
 
-    public User findUserById(Long id) {
-        var user = userRepo.findById(id);
-		if (user.isPresent()) return user.get();
-		return null;
+    public Optional<User> findUserById(Long id) {
+        return userRepo.findById(id);
     }
 		
-    public User findUserByLogin(String login) {
-        var res = users.entrySet().stream()
-                .filter(u -> u.getValue().getLogin().toLowerCase().equals(login.toLowerCase()))
-                .findFirst();
-        if (res.isPresent())
-            return res.get().getValue();
-        return null;
+    public Optional<User> findUserByLogin(String login) {
+		return userRepo.findByLogin(login);
     }
     public boolean userExists(String login) {
-        User user = findUserByLogin(login);
-        if (null == user) return false;
-        return true;
+        var user = findUserByLogin(login);
+        if (user.isPresent()) return true;
+        return false;
     }
     public User findUserByLoginAndHash(String login, String hash) {
         return users.entrySet().stream()
