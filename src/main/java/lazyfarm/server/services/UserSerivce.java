@@ -1,15 +1,23 @@
 package lazyfarm.server.services;
 
 import lazyfarm.server.entities.User;
+import lazyfarm.server.repositories.UserRepository;
 import org.springframework.stereotype.Service;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import javax.validation.constraints.Null;
 import java.util.Map;
 import java.util.HashMap;
+import java.util.Optional;
 
 @Service
 public class UserSerivce {
-    private final Map<Long, User> users;
+    
+	@Autowired
+	private UserRepository userRepo;
+	
+	private final Map<Long, User> users;
+	
     public UserSerivce() {
         users = new HashMap<>();
         users.put(1L, new User(1L, "User 1"));
@@ -18,8 +26,11 @@ public class UserSerivce {
     }
 
     public User findUserById(Long id) {
-        return users.get(id);
+        var user = userRepo.findById(id);
+		if (user.isPresent()) return user.get();
+		return null;
     }
+		
     public User findUserByLogin(String login) {
         var res = users.entrySet().stream()
                 .filter(u -> u.getValue().getLogin().toLowerCase().equals(login.toLowerCase()))

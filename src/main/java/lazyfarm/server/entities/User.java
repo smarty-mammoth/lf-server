@@ -1,9 +1,21 @@
 package lazyfarm.server.entities;
 
-public class User {
-    private String login;
-    private Long id;
+import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
+import javax.persistence.Id;
 
+@Entity
+public class User {
+    @Id
+	@GeneratedValue(strategy = GenerationType.AUTO)
+	private Long id;
+	private String login;
+	private String hash;
+    private String token;
+	
+	public User() {}
+    
     public String getHash() {
         return hash;
     }
@@ -12,8 +24,6 @@ public class User {
         this.hash = hash;
     }
 
-    private String hash;
-
     public String getToken() {
         return token;
     }
@@ -21,8 +31,6 @@ public class User {
     public void setToken(String token) {
         this.token = token;
     }
-
-    private String token;
 
     public Long getId() {
         return id;
