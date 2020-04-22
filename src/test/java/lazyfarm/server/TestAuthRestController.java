@@ -27,6 +27,8 @@ import static org.hamcrest.Matchers.containsString;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.content;
 
+import java.util.Optional;
+
 //@SpringBootTest
 //@AutoConfigureMockMvc
 @WebMvcTest(AuthRestController.class)
@@ -66,7 +68,7 @@ public class TestAuthRestController {
         String token = "calculated-token";
         User mockedUser = new User(login, hash);
         Mockito.when(userSerivce.findUserByLoginAndHash(mockedUser.getLogin(), mockedUser.getHash()))
-                .thenReturn(mockedUser);
+                .thenReturn(Optional.of(mockedUser));
         Mockito.when(userSerivce.calculateHash(pwd)).thenReturn(hash);
         Mockito.when(userSerivce.calculateToken(mockedUser)).thenReturn(token);
 
@@ -84,7 +86,7 @@ public class TestAuthRestController {
         String hash = "calculated-hash";
         User mockedUser = new User(login, hash);
         Mockito.when(userSerivce.findUserByLoginAndHash(mockedUser.getLogin(), mockedUser.getHash()))
-                .thenReturn(mockedUser);
+                .thenReturn(Optional.of(mockedUser));
         Mockito.when(userSerivce.calculateHash(pwd)).thenReturn(hash);
         Mockito.when(userSerivce.calculateHash(incorrectPwd)).thenReturn("incorrect-hash");
 

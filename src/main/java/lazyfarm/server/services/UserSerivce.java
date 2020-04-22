@@ -10,21 +10,15 @@ import java.util.Map;
 import java.util.HashMap;
 import java.util.Optional;
 
+import org.springframework.transaction.annotation.Transactional;
+
 @Service
+@Transactional
 public class UserSerivce {
     
 	@Autowired
 	private UserRepository userRepo;
-	
-	private final Map<Long, User> users;
-	
-    public UserSerivce() {
-        users = new HashMap<>();
-        users.put(1L, new User(1L, "User 1"));
-        users.put(2L, new User(2L, "User 2"));
-        users.put(3L, new User(3L, "User 3"));
-    }
-
+		
     public Optional<User> findUserById(Long id) {
         return userRepo.findById(id);
     }
@@ -33,18 +27,14 @@ public class UserSerivce {
 		return userRepo.findByLogin(login);
     }
     public boolean userExists(String login) {
-        var user = findUserByLogin(login);
-        if (user.isPresent()) return true;
-        return false;
+        return findUserByLogin(login).isPresent();
     }
-    public User findUserByLoginAndHash(String login, String hash) {
-        return users.entrySet().stream()
-                .filter(u -> u.getValue().getHash().equals(hash) && u.getValue().getLogin().equals(login))
-                .findFirst().get().getValue();
+    public Optional<User> findUserByLoginAndHash(String login, String hash) {
+		return userRepo.findByLoginAndHash(login, hash);
     }
 
-    public User findUserByToken(String token) {
-        return null;
+    public Optional<User> findUserByToken(String token) {
+		return userRepo.findByToken(token);
     }
 
     public String calculateHash(String password) {
@@ -56,11 +46,10 @@ public class UserSerivce {
     }
 
     public void addUser(User user) {
-        users.put(users.size() + 1L, user);
+		userRepo.save(user);
     }
-
-    public void updateUser(User user) {
-
-    }
-
+	
+	public void updateUser(User user) {
+		userRepo.save(user);
+	}
 }

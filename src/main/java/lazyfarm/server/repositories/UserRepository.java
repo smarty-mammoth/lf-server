@@ -11,8 +11,8 @@ import org.springframework.stereotype.Repository;
 @Repository
 public interface UserRepository extends CrudRepository<User, Long> {
 	
-	List<User> 	findByToken(@Param("token") String token);
-	// User 		findById(long id);
+	Optional<User>		findByToken(String token);
 	Optional<User>		findByLogin(String login);
+	Optional<User>		findByLoginAndHash(String login, String hash);
 	
 }

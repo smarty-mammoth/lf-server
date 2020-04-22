@@ -40,11 +40,16 @@ public class AuthRestController {
         try {
             if (login.isEmpty()) throw new APIException(CodeError.LOGIN_IS_EMPTY);
             if (password.isEmpty()) throw new APIException(CodeError.PASSWORD_IS_EMPTY);
-            User user = userService.findUserByLoginAndHash(login, userService.calculateHash(password));
-            if (null == user) throw new APIException(CodeError.INCORRECT_PASSWORD);
-            user.setToken(userService.calculateToken(user));
-            userService.updateUser(user);
-            response.setToken(user.getToken());
+            var user = userService.findUserByLoginAndHash(login, userService.calculateHash(password));
+			
+			if (!user.isPresent()) throw new APIException(CodeError.INCORRECT_PASSWORD);
+			user.ifPresent(
+				u -> {
+					u.setToken(userService.calculateToken(u));
+					userService.updateUser(u);
+					response.setToken(u.getToken());
+				}
+			);
         }
 
         catch (APIException e) {

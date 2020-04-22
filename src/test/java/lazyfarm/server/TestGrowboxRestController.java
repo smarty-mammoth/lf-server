@@ -26,6 +26,7 @@ import java.lang.reflect.Array;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
+import java.util.Optional;
 
 import static org.hamcrest.Matchers.containsString;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
@@ -61,7 +62,7 @@ public class TestGrowboxRestController {
     public void testAddSensorToGrowbox() throws Exception {
         String mockedToken = "0xABADBABE";
         Mockito.when(growBoxSerivce.findById(1L)).thenReturn(new GrowBox("box1"));
-        Mockito.when(userSerivce.findUserByToken(mockedToken)).thenReturn(new User("test", "test"));
+        Mockito.when(userSerivce.findUserByToken(mockedToken)).thenReturn(Optional.of(new User("test", "test")));
 
         mockMvc.perform(get("/1/sensors/add")
                 .param("token", mockedToken)
