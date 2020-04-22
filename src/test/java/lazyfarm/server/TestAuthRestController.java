@@ -20,6 +20,7 @@ import org.springframework.test.web.servlet.MockMvcBuilder;
 //import static org.junit.Assert.*;
 import org.springframework.test.web.servlet.ResultMatcher;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import org.springframework.test.web.servlet.result.MockMvcResultMatchers;
 import org.springframework.web.util.UriComponents;
 
@@ -38,24 +39,24 @@ public class TestAuthRestController {
     private UserSerivce userSerivce;
 
     @Test
-    public void testSignUpPasswordIsEmpty() throws Exception {
+    public void testSignUp_PasswordIsEmpty() throws Exception {
         Mockito.when(userSerivce.userExists("test")).thenReturn(false);
-        mockMvc.perform(get("/auth/sign-up").param("login", "test"))
+        mockMvc.perform(post("/auth/sign-up").param("login", "test"))
             .andDo(print())
             .andExpect(content().json("{'success': false}"));
     }
 
     @Test
-    public void testSignUpLoginExists() throws Exception {
+    public void testSignUp_LoginExists() throws Exception {
         Mockito.when(userSerivce.userExists("test")).thenReturn(true);
-        mockMvc.perform(get("/auth/sign-up").param("login", "test").param("password", "123"))
+        mockMvc.perform(post("/auth/sign-up").param("login", "test").param("password", "123"))
                 .andExpect(content().json("{'success': false}"));
     }
 
     @Test
-    public void testSignUpSuccess() throws Exception {
+    public void testSignUp_Success() throws Exception {
         Mockito.when(userSerivce.userExists("test")).thenReturn(false);
-        mockMvc.perform(get("/auth/sign-up").param("login", "test").param("password", "123"))
+        mockMvc.perform(post("/auth/sign-up").param("login", "test").param("password", "123"))
                 .andExpect(content().json("{'success': true}"));
     }
     @Test
@@ -70,7 +71,7 @@ public class TestAuthRestController {
         Mockito.when(userSerivce.calculateHash(pwd)).thenReturn(hash);
         Mockito.when(userSerivce.calculateToken(mockedUser)).thenReturn(token);
 
-        mockMvc.perform(get("/auth/sign-in")
+        mockMvc.perform(post("/auth/sign-in")
                 .param("login", login)
                 .param("password", pwd))
                 .andExpect(content().json("{'success': true, token: 'calculated-token'}"));
@@ -88,7 +89,7 @@ public class TestAuthRestController {
         Mockito.when(userSerivce.calculateHash(pwd)).thenReturn(hash);
         Mockito.when(userSerivce.calculateHash(incorrectPwd)).thenReturn("incorrect-hash");
 
-        mockMvc.perform(get("/auth/sign-in").param("login", login).param("password", incorrectPwd))
+        mockMvc.perform(post("/auth/sign-in").param("login", login).param("password", incorrectPwd))
                 .andExpect(content().json("{'success': false}"));
     }
 
