@@ -109,5 +109,12 @@ public class TestUserService {
 		assertThatThrownBy(() -> userService.signIn("Dont_exists_login", "incorrected_password"))
 		.isExactlyInstanceOf(APIException.class);
 	}
+
+	@Test
+	public void testCalculateHash() throws Exception {
+		String expected = "622d5cb2547b187d843dc60a322bddeb";
+		String actual = userService.calculateHash("text-for-hash");
+		assertThat(actual).isEqualTo(expected);
+	}
 		
 }

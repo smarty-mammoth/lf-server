@@ -8,6 +8,7 @@ import org.springframework.stereotype.Service;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import javax.validation.constraints.Null;
+import java.util.Date;
 import java.util.Map;
 import java.util.HashMap;
 import java.util.Optional;
@@ -43,23 +44,22 @@ public class UserSerivce {
 	public String signIn(String login, String password) throws Exception {
 		if (login.isEmpty()) throw new APIException(CodeError.LOGIN_IS_EMPTY);
 		if (password.isEmpty()) throw new APIException(CodeError.PASSWORD_IS_EMPTY);
-		var user = findUserByLoginAndHash(login, calculateHash(password));
-		return user.map(u -> {  
-			u.setToken(calculateToken(u));
-			updateUser(u);
-			return u.getToken();
-		})
-		.orElseThrow(() -> new APIException(CodeError.INCORRECT_PASSWORD));
+		var user = findUserByLoginAndHash(login, calculateHash(password))
+				.orElseThrow(() -> new APIException(CodeError.INCORRECT_PASSWORD));
+		user.setToken(calculateToken(user));
+		updateUser(user);
+		return user.getToken();
 	}
 
     public String calculateHash(String password) throws Exception {
-		var md = MessageDigest.getInstance("MD5");
-		md.digest(password.getBytes("UTF-8"));
-        return "0xABADBABE" + password;
+		var bytes = MessageDigest.getInstance("MD5").digest(password.getBytes("UTF-8"));
+		var sb = new StringBuilder();
+		for (var item: bytes) sb.append(String.format("%02x", item));
+        return sb.toString();
     }
 
-    public String calculateToken(User user) {
-        return "0xABADC0DE" + user.getHash();
+    public String calculateToken(User user) throws Exception {
+        return calculateHash(user.getLogin() + user.getHash() + new Date());
     }
 
     public void addUser(User user) {
