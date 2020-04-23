@@ -11,6 +11,7 @@ import javax.validation.constraints.Null;
 import java.util.Map;
 import java.util.HashMap;
 import java.util.Optional;
+import java.security.MessageDigest;
 
 import org.springframework.transaction.annotation.Transactional;
 
@@ -51,7 +52,9 @@ public class UserSerivce {
 		.orElseThrow(() -> new APIException(CodeError.INCORRECT_PASSWORD));
 	}
 
-    public String calculateHash(String password) {
+    public String calculateHash(String password) throws Exception {
+		var md = MessageDigest.getInstance("MD5");
+		md.digest(password.getBytes("UTF-8"));
         return "0xABADBABE" + password;
     }
 

@@ -30,6 +30,9 @@ public class AuthRestController {
         catch (APIException e) {
             response.setError(e.getError());
         }
+		catch (Exception e) {
+			response.setError(Error.UNKNOWN);
+		}
         return response;
     }
 
