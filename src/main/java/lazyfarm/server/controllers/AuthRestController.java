@@ -10,7 +10,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
-@RequestMapping("auth")
+@RequestMapping(value = "auth", method = RequestMethod.POST)
 public class AuthRestController {
 
     @Autowired UserSerivce userService;
@@ -32,7 +32,7 @@ public class AuthRestController {
         return response;
     }
 
-    @RequestMapping("sign-in")
+    @RequestMapping(value = "sign-in")
     public ResponseData signIn(@RequestParam(value = "login", defaultValue = "") String login,
                                @RequestParam(value = "password", defaultValue = "") String password)
     {
