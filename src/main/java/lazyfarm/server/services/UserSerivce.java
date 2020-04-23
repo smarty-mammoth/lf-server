@@ -1,5 +1,7 @@
 package lazyfarm.server.services;
 
+import lazyfarm.server.exeptions.APIException;
+import lazyfarm.server.response.CodeError;
 import lazyfarm.server.entities.User;
 import lazyfarm.server.repositories.UserRepository;
 import org.springframework.stereotype.Service;
@@ -36,6 +38,18 @@ public class UserSerivce {
     public Optional<User> findUserByToken(String token) {
 		return userRepo.findByToken(token);
     }
+	
+	public String signIn(String login, String password) throws Exception {
+		if (login.isEmpty()) throw new APIException(CodeError.LOGIN_IS_EMPTY);
+		if (password.isEmpty()) throw new APIException(CodeError.PASSWORD_IS_EMPTY);
+		var user = findUserByLoginAndHash(login, calculateHash(password));
+		return user.map(u -> {  
+			u.setToken(calculateToken(u));
+			updateUser(u);
+			return u.getToken();
+		})
+		.orElseThrow(() -> new APIException(CodeError.INCORRECT_PASSWORD));
+	}
 
     public String calculateHash(String password) {
         return "0xABADBABE" + password;

@@ -3,6 +3,7 @@ package lazyfarm.server.controllers;
 import lazyfarm.server.exeptions.APIException;
 import lazyfarm.server.response.AuthResponseData;
 import lazyfarm.server.response.CodeError;
+import lazyfarm.server.response.Error;
 import lazyfarm.server.response.ResponseData;
 import lazyfarm.server.entities.User;
 import lazyfarm.server.services.UserSerivce;
@@ -38,23 +39,14 @@ public class AuthRestController {
     {
         AuthResponseData response = new AuthResponseData();
         try {
-            if (login.isEmpty()) throw new APIException(CodeError.LOGIN_IS_EMPTY);
-            if (password.isEmpty()) throw new APIException(CodeError.PASSWORD_IS_EMPTY);
-            var user = userService.findUserByLoginAndHash(login, userService.calculateHash(password));
-			
-			if (!user.isPresent()) throw new APIException(CodeError.INCORRECT_PASSWORD);
-			user.ifPresent(
-				u -> {
-					u.setToken(userService.calculateToken(u));
-					userService.updateUser(u);
-					response.setToken(u.getToken());
-				}
-			);
+			response.setToken(userService.signIn(login, password));
         }
-
         catch (APIException e) {
             response.setError(e.getError());
         }
+		catch (Exception e) {
+			response.setError(Error.UNKNOWN);
+		}
         return response;
 
     }

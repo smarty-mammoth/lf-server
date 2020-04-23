@@ -12,7 +12,9 @@ public class Error {
 	public String getMsg() { return msg; }
 	
 	public int getCode() { return code; }
-	
-	
-	
+		
+	public static final Error UNKNOWN = new Error(
+		CodeError.UNKNOWN.getValue(), 
+		CodeError.UNKNOWN.toString()
+	);
 }

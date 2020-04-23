@@ -3,11 +3,13 @@ package lazyfarm.server;
 import lazyfarm.server.entities.User;
 import lazyfarm.server.services.UserSerivce;
 import lazyfarm.server.repositories.UserRepository;
+import lazyfarm.server.exeptions.APIException;
 
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.beans.factory.annotation.Autowired;
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.assertj.core.api.Assertions.assertThatThrownBy;
 
 import java.util.Optional;
 
@@ -78,14 +80,34 @@ public class TestUserService {
 	}
 	
 	@Test
-	public void FirstTest() {
-		var user = new User("user1", "123");
-		userRepo.save(user);
-		var newUser = userRepo.findById(user.getId());
-		assertThat(newUser).isNotNull();
-		assertThat(newUser.isPresent()).isEqualTo(true);
+	public void testSignIn_Success() throws Exception {
+		String login = "user5";
+		String password = "123";
+		String hash = userService.calculateHash(password);
+		var user = new User(login, hash);
+		userService.addUser(user);
+		String token = userService.calculateToken(user);
+		
+		String actualToken = userService.signIn(login, password);
+		assertThat(actualToken).isEqualTo(token);
 	}
 	
+	@Test
+	public void testSignIn_IncorrectPassword() throws Exception {
+		String login = "user6";
+		String password = "123";
+		String hash = userService.calculateHash(password);
+		var user = new User(login, hash);
+		userService.addUser(user);
+				
+		assertThatThrownBy(() -> userService.signIn(login, "incorrected_password"))
+		.isExactlyInstanceOf(APIException.class);
+	}	
 	
-	
+	@Test
+	public void testSignInt_UserDontExists() throws Exception {
+		assertThatThrownBy(() -> userService.signIn("Dont_exists_login", "incorrected_password"))
+		.isExactlyInstanceOf(APIException.class);
+	}
+		
 }
