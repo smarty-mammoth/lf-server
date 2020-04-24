@@ -86,10 +86,8 @@ public class TestUserService {
 		String hash = userService.calculateHash(password);
 		var user = new User(login, hash);
 		userService.addUser(user);
-		String token = userService.calculateToken(user);
-		
 		String actualToken = userService.signIn(login, password);
-		assertThat(actualToken).isEqualTo(token);
+		assertThat(actualToken).isNotEqualTo(user.getToken());
 	}
 	
 	@Test
@@ -108,6 +106,21 @@ public class TestUserService {
 	public void testSignInt_UserDontExists() throws Exception {
 		assertThatThrownBy(() -> userService.signIn("Dont_exists_login", "incorrected_password"))
 		.isExactlyInstanceOf(APIException.class);
+	}
+	
+	@Test
+	public void testSignOut() throws Exception {
+		String login = "user7";
+		String password = "shfjshi";
+		var user = new User(login, userService.calculateHash(password));
+		userRepo.save(user);
+		String token = userService.signIn(login, password);
+		userService.signOut(token);
+		var foundUser = userService.findUserByLogin(login);
+		assertThat(foundUser.isPresent()).isEqualTo(true);
+		assertThat(foundUser.get().getToken()).isNotEqualTo(token);
+		foundUser = userService.findUserByToken(token);
+		assertThat(foundUser.isPresent()).isEqualTo(false);
 	}
 
 	@Test

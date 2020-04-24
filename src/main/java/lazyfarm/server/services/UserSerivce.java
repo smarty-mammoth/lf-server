@@ -13,6 +13,8 @@ import java.util.Map;
 import java.util.HashMap;
 import java.util.Optional;
 import java.security.MessageDigest;
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
 
 import org.springframework.transaction.annotation.Transactional;
 
@@ -50,6 +52,14 @@ public class UserSerivce {
 		updateUser(user);
 		return user.getToken();
 	}
+	
+	public void signOut(String token) throws Exception {
+		if (token.isEmpty()) throw new APIException(CodeError.TOKEN_IS_EMPTY);
+		var user = findUserByToken(token)
+					.orElseThrow(() -> new APIException(CodeError.NOT_AUTHORIZED));
+		user.setToken(calculateToken(user));
+		updateUser(user);
+	}
 
     public String calculateHash(String password) throws Exception {
 		var bytes = MessageDigest.getInstance("MD5").digest(password.getBytes("UTF-8"));
@@ -59,7 +69,8 @@ public class UserSerivce {
     }
 
     public String calculateToken(User user) throws Exception {
-        return calculateHash(user.getLogin() + user.getHash() + new Date());
+		DateFormat dateFormat = new SimpleDateFormat("yyyy/MM/dd HH:mm:ss.SSS");
+        return calculateHash(user.getLogin() + user.getHash() + dateFormat.format(new Date()));
     }
 
     public void addUser(User user) {

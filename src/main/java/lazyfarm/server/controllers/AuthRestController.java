@@ -53,4 +53,19 @@ public class AuthRestController {
         return response;
 
     }
+	
+	@RequestMapping(value = "sign-out")
+	public ResponseData signOut(String token) {
+		ResponseData response = new ResponseData();
+		try {
+			userService.signOut(token);
+		}
+		catch (APIException e) {
+            response.setError(e.getError());
+        }
+		catch (Exception e) {
+			response.setError(Error.UNKNOWN);
+		}
+		return response;
+	}
 }
