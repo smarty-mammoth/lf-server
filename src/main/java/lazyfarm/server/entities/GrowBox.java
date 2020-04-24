@@ -1,10 +1,14 @@
 package lazyfarm.server.entities;
 
+import lombok.Data;
+import lombok.NoArgsConstructor;
+
 import java.util.List;
 import javax.persistence.*;
 
-
 @Entity
+@NoArgsConstructor
+@Data
 public class GrowBox {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
@@ -23,45 +27,5 @@ public class GrowBox {
 
     public GrowBox(String name) {
         this.name = name;
-    }
-
-    public Long getId() {
-        return id;
-    }
-
-    public void setId(Long id) {
-        this.id = id;
-    }
-
-    public String getName() {
-        return name;
-    }
-
-    public void setName(String name) {
-        this.name = name;
-    }
-
-    public String getDescription() {
-        return description;
-    }
-
-    public void setDescription(String description) {
-        this.description = description;
-    }
-
-    public List<Device> getDevices() {
-        return devices;
-    }
-
-    public void setDevices(List<Device> devices) {
-        this.devices = devices;
-    }
-
-    public List<Sensor> getSensors() {
-        return sensors;
-    }
-
-    public void setSensors(List<Sensor> sensors) {
-        this.sensors = sensors;
     }
 }

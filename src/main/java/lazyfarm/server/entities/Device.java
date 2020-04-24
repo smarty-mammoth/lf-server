@@ -1,8 +1,13 @@
 package lazyfarm.server.entities;
 
+import lombok.Data;
+import lombok.NoArgsConstructor;
+
 import javax.persistence.*;
 
 @Entity
+@NoArgsConstructor
+@Data
 public class Device {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
