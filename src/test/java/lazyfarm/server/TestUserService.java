@@ -43,7 +43,7 @@ public class TestUserService {
 			() -> assertThat("Found user cannot be null.")
 		);
 	}
-	
+
 	@Test
 	public void testFindUserByToken() {
 		var user = new User("user2", "hash");

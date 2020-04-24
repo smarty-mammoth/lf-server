@@ -1,13 +1,25 @@
 package lazyfarm.server.entities;
 
 import java.util.List;
+import javax.persistence.*;
 
+
+@Entity
 public class GrowBox {
+    @Id
+    @GeneratedValue(strategy = GenerationType.AUTO)
     private Long id;
     private String name;
     private String description;
+    @OneToMany(mappedBy = "growBox")
     private List<Device> devices;
-    private List<Sensor> densors;
+    @OneToMany(mappedBy = "growBox")
+    private List<Sensor> sensors;
+
+    public GrowBox(String name, String description) {
+        this.name = name;
+        this.description = description;
+    }
 
     public GrowBox(String name) {
         this.name = name;
@@ -45,11 +57,11 @@ public class GrowBox {
         this.devices = devices;
     }
 
-    public List<Sensor> getDensors() {
-        return densors;
+    public List<Sensor> getSensors() {
+        return sensors;
     }
 
-    public void setDensors(List<Sensor> densors) {
-        this.densors = densors;
+    public void setSensors(List<Sensor> sensors) {
+        this.sensors = sensors;
     }
 }

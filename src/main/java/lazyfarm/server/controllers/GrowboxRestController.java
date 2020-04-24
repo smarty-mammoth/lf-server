@@ -42,8 +42,8 @@ public class GrowboxRestController {
     public ResponseData getAllSensorsByIdGrowbox(@PathVariable("id") Long idGrowbox) {
         var response = new SensorResponseData();
         try {
-            var box = growboxService.findById(idGrowbox);
-            if (null == box) throw new APIException(CodeError.GROWBOX_NOT_FOUND);
+            var box = growboxService.findById(idGrowbox)
+                    .orElseThrow(() -> new APIException(CodeError.GROWBOX_NOT_FOUND));
             response.setSensors(growboxService.findSensorsById(idGrowbox));
         }
         catch (APIException e) {
