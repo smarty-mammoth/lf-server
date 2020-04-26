@@ -2,6 +2,7 @@ package lazyfarm.server;
 
 import lazyfarm.server.entities.Device;
 import lazyfarm.server.entities.GrowBox;
+import lazyfarm.server.exeptions.APIException;
 import lazyfarm.server.repositories.DeviceRepository;
 import lazyfarm.server.repositories.GrowboxRepository;
 import lazyfarm.server.repositories.SensorRepository;
@@ -38,5 +39,13 @@ public class TestGrowboxService {
         growboxService.addDevice(box.getId(), device);
         var foundDevice = deviceRepo.findAll(box.getId()).stream().findFirst();
         assertThat(foundDevice.isPresent()).isEqualTo(true);
+        assertThat(foundDevice.get().getName()).isEqualTo("dev1");
+    }
+
+    @Test
+    public void testAddDevice_GrowboxNotFound() throws Exception {
+        Long unexistingGrowbox = 999L;
+        assertThatThrownBy(() -> growboxService.addDevice(unexistingGrowbox, new Device("dev1", "localhost", null)))
+                .isExactlyInstanceOf(APIException.class);
     }
 }
