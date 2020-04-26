@@ -15,7 +15,7 @@ public class GrowBox {
     private Long id;
     private String name;
     private String description;
-    @OneToMany(mappedBy = "growBox")
+    @OneToMany(mappedBy = "growBox", cascade = { CascadeType.ALL })
     private List<Device> devices;
     @OneToMany(mappedBy = "growBox")
     private List<Sensor> sensors;

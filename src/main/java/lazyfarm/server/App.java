@@ -3,8 +3,16 @@
  */
 package lazyfarm.server;
 
+import org.hibernate.HibernateException;
+import org.hibernate.SessionFactory;
+import org.hibernate.boot.registry.StandardServiceRegistryBuilder;
+import org.hibernate.cfg.Configuration;
+import org.hibernate.service.ServiceRegistry;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
+import org.springframework.context.annotation.Bean;
+import org.springframework.data.jpa.repository.config.EnableJpaRepositories;
+import org.springframework.transaction.annotation.EnableTransactionManagement;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
@@ -13,7 +21,22 @@ import org.springframework.scheduling.annotation.EnableScheduling;
 @SpringBootApplication
 @RestController
 @EnableScheduling
+//@EnableJpaRepositories("lazyfarm.server.repositories")
+@EnableTransactionManagement
 public class App {
+
+//    @Bean(name="entityManagerFactory")
+    
+//    private static SessionFactory configSessionFactory() throws HibernateException  {
+//        Configuration configuration = new Configuration();
+//        //configuration.configure();
+//
+//        ServiceRegistry serviceRegistry = new StandardServiceRegistryBuilder()
+//                .applySettings(configuration.getProperties())
+//                .build();
+//
+//        return configuration.buildSessionFactory(serviceRegistry);
+//    }
 
     public static void main(String[] args) {
         SpringApplication.run(App.class, args);

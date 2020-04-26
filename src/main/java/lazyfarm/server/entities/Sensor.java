@@ -14,6 +14,7 @@ public class Sensor {
     private Long id;
     private String name;
     private String description;
+    private String deviceName;
     @OneToOne(cascade = CascadeType.ALL)
     @JoinColumn(name = "device_id", referencedColumnName = "id")
     private Device device;

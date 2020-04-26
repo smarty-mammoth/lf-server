@@ -19,7 +19,6 @@ import java.text.SimpleDateFormat;
 import org.springframework.transaction.annotation.Transactional;
 
 @Service
-@Transactional
 public class UserSerivce {
     
 	@Autowired
@@ -73,11 +72,11 @@ public class UserSerivce {
         return calculateHash(user.getLogin() + user.getHash() + dateFormat.format(new Date()));
     }
 
-    public void addUser(User user) {
+    public synchronized void addUser(User user) {
 		userRepo.save(user);
     }
 	
-	public void updateUser(User user) {
+	public synchronized void updateUser(User user) {
 		userRepo.save(user);
 	}
 }
