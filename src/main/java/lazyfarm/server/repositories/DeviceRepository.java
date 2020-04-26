@@ -11,6 +11,6 @@ import java.util.List;
 @Repository
 public interface DeviceRepository  extends CrudRepository<Device, Long> {
 
-//    @Query("SELECT d FROM Device d WHERE d.growBox=:growBox")
-//    List<Device> findAll(@Param("growBox") Long growBox);
+    @Query("SELECT d FROM Device d WHERE d.growBox.id=:growBox")
+    List<Device> findAll(@Param("growBox") Long growBox);
 }

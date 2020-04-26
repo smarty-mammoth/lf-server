@@ -48,7 +48,7 @@ public class GrowboxService {
 
     public void addDevice(Long idGrowbox, Device device) throws Exception {
 		var growBox = growBoxRepo.findById(idGrowbox).orElseThrow(() -> new APIException(CodeError.GROWBOX_NOT_FOUND));
-
+        growBox.getDevices().add(device);
     }
 
     public void addSensor(Long idGrowbox, Sensor sensor) {
